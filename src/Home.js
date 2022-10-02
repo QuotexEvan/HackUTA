@@ -18,7 +18,7 @@ function Home() {
       setCurrentQuestion(nextQuestion);
     } else {
       setShowScore(true);
-      if (score === question.length || question.length - 1) {
+      if (score >= question.length - 1) {
         changeDiscount(20);
       } else {
         changeDiscount(8);
@@ -33,13 +33,13 @@ function Home() {
       setVantaEffect(
         GLOBE({
           el: myRef.current,
-          minHeight: 1000,
+          minHeight: 700,
           minWidth: 200.0,
           scale: 1.0,
           scaleMobile: 1.0,
           color: 0xd20038,
           color2: 0xff0000,
-          backgroundColor: 0xd4d4d4,
+          backgroundColor: 0xffffff,
           mouseControls: true,
           touchControls: true,
           gyroControls: false,
@@ -53,18 +53,42 @@ function Home() {
   }, [vantaEffect]);
   return (
     <div ref={myRef}>
-      <div className="quizCard">
-        <h3>Quiz</h3>
-        <p>
-          Question {currentQuestion} out of {question.length}
-        </p>
-        <div>{question[currentQuestion].questionText}</div>
-        <p>
-          {question[currentQuestion].answerOption.map((answer, index) => (
-            <p onClick={() => handleClick(answer)}>{answer.answerText}</p>
-          ))}
-        </p>
-      </div>
+      {!showScore ? (
+        <div className="quizCard">
+          <h3 style={{ paddingTop: "16px" }}>Quiz</h3>
+          <p style={{ fontSize: "1.2rem" }}>
+            Question {currentQuestion} out of {question.length}
+          </p>
+          <div style={{ fontSize: "1.3rem" }}>
+            {question[currentQuestion].questionText}
+          </div>
+          <p
+            style={{
+              fontSize: "1.2rem",
+              textAlign: "start",
+              paddingTop: "5px",
+              cursor: "pointer",
+            }}
+          >
+            {question[currentQuestion].answerOption.map((answer, index) => (
+              <p onClick={() => handleClick(answer)}>{answer.answerText}</p>
+            ))}
+          </p>
+        </div>
+      ) : (
+        <div className="quizCard">
+          <p style={{ fontSize: "1.5rem" }}>
+            You scored {score} out of {question.length}
+          </p>
+          <p style={{ fontSize: "2rem", fontWeight: "bold" }}>
+            And for your score you get {discount} % of selected insurance plans{" "}
+          </p>
+          <button style={{ borderRadius: "20px", padding: "10px" }}>
+            {" "}
+            Sign Up to claim your discount
+          </button>
+        </div>
+      )}
     </div>
   );
 }
